@@ -1,15 +1,21 @@
+#[derive(Clone)]
+struct Player {
+    id: i32,
+    name: String,
+    player_positions: Vec<String>,
+}
 
-
-fn insert(num: i32, module: usize, hash_table: &mut[Vec<i32>]){
-    let index = (num as usize) % module;
+fn insert(num: Player, module: usize, hash_table: &mut[Vec<Player>]){
+    let index = (num.id as usize) % module;
     hash_table[index].push(num);
 }
 
-fn search(num: i32, module: usize, hash_table: &[Vec<i32>]) ->  Option<i32> {
-    let index = (num as usize) % module;
-    for &val in &hash_table[index] {
-        if val == num {
-            return Some(val);
+fn search(id: i32, module: usize, hash_table: &[Vec<Player>]) ->  Option<Player> {
+    let index = (id as usize) % module;
+    
+    for player in &hash_table[index] {
+        if player.id == id {
+            return Some(player.clone());
         }
     }
     None
@@ -17,18 +23,20 @@ fn search(num: i32, module: usize, hash_table: &[Vec<i32>]) ->  Option<i32> {
 
 
 fn main() {
-    println!("Hello, world!");
 
     const MODULE : usize = 25; 
-    const ARRAY_REPEAT_VALUE: Vec<i32> = Vec::new();
-    let mut hash_table : [Vec<i32>; MODULE] = [ARRAY_REPEAT_VALUE; MODULE];
+    const ARRAY_REPEAT_VALUE: Vec<Player> = Vec::new();
+    let mut hash_table : [Vec<Player>; MODULE] = [ARRAY_REPEAT_VALUE; MODULE];
 
-    insert(12, MODULE, &mut hash_table);
-    insert(2, MODULE, &mut hash_table);
-    insert(90, MODULE, &mut hash_table);
-    insert(15, MODULE, &mut hash_table);
-    insert(28, MODULE, &mut hash_table);
+    let messi : Player = Player{
+        id: 13,
+        name: "Lionel Messi".to_string(),
+        player_positions: vec!["Forward".to_string(), "Midfielder".to_string()]
+    };
 
-    println!("{:?}", search(13, MODULE, &hash_table));
-    println!("{:?}", hash_table);
+
+    insert(messi, MODULE, &mut hash_table);
+
+    println!("{:?}", search(13, MODULE, &hash_table).unwrap().name);
+
 }
